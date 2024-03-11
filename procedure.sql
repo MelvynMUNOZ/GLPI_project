@@ -1,29 +1,16 @@
 -- Ce fichier répertorie les procédures stockées qui seront utilisées dans le projet
 -------------- Procédure --------------
 
-CREATE OR REPLACE PROCEDURE fn_notify_ticket_status_changed(
-    ticket_id IN NUMBER,
-    old_status IN VARCHAR2,
-    new_status IN VARCHAR2
-)
-AS
-    creator_id NUMBER;
+-- Procédure pour notifier un utilisateur lorsqu'un ticket change de statut
+CREATE OR REPLACE PROCEDURE fn_notify_ticket_status_changed (
+    p_user_id NUMBER,
+    p_ticket_id NUMBER,
+    p_old_status VARCHAR2,
+    p_new_status VARCHAR2
+) AS
 BEGIN
-    -- Vérifier si le statut du ticket a réellement changé
-    IF old_status != new_status THEN
-        -- Trouver l'ID de l'utilisateur qui a créé le ticket
-        SELECT OWNER_ID INTO creator_id
-        FROM GLPI_TICKET
-        WHERE ID = ticket_id;
-
-        -- Insérer une nouvelle notification dans la table NOTIFICATIONS
-        INSERT INTO NOTIFICATIONS(USER_ID, TICKET_ID, MESSAGE, STATUS)
-        VALUES (
-            creator_id,
-            ticket_id,
-            'Le statut de votre ticket a changé : ' || old_status || ' -> ' || new_status,
-            'Attente'
-        );
-    END IF;
+    INSERT INTO NOTIFICATIONS (USER_ID, TICKET_ID, MESSAGE, STATUS, DATE_CREATED)
+    VALUES (p_user_id, p_ticket_id, 'Statut changé de ' || p_old_status || ' à ' || p_new_status, 'Created', SYSDATE);
 END;
 /
+
