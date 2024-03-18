@@ -9,10 +9,8 @@ CREATE OR REPLACE PROCEDURE fn_notify_ticket_status_changed (
     p_new_status VARCHAR2
 ) AS
 BEGIN
-    IF p_new_status <> p_old_status THEN -- Si le statut a changé
-        INSERT INTO NOTIFICATIONS (USER_ID, TICKET_ID, MESSAGE, STATUS, DATE_CREATED)
-        VALUES (p_user_id, p_ticket_id, 'Statut changé de ' || p_old_status || ' à ' || p_new_status, p_new_status, SYSDATE);
-    END IF;
+    INSERT INTO NOTIFICATIONS (USER_ID, TICKET_ID, MESSAGE, STATUS, DATE_CREATED)
+    VALUES (p_user_id, p_ticket_id, 'Statut changé de ' || p_old_status || ' à ' || p_new_status, p_new_status, SYSDATE);
 END;
 /
 
