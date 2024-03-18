@@ -1,30 +1,32 @@
 -- Suppression des anciens roles (si creation deja realisee)
 
+
+
 -- Création des roles pour les differents utilisateurs
 
 -- Role admin
-create role admin;
+CREATE ROLE admin;
 
 -- autorisation du role
-grant dba to admin;
+GRANT dba TO admin;
 
 -------------------------------------
 
 -- Role user
-create role user;
+CREATE ROLE user;
 
 -- autorisation du role
-grant connect to user;
-grant select, insert on GLPI_TICKET to user;
+GRANT CONNECT TO user;
+GRANT SELECT, INSERT on GLPI_TICKET TO user;
 
 -------------------------------------
 
 -- Role Operator
-create role operator;
+CREATE ROLE operator;
 
 -- autorisation du role
-grant connect to operator;
-grant select, insert on GLPI_TICKET to operator;
-grant update on VIEW_OPERATOR_GLPI_TICKET to operator;
-grant select, insert on GLPI_TICKET_TASK to operator;
-grant select, insert on GLPI_TICKET_SOLUTION to operator;
+GRANT CONNECT TO operator;
+GRANT SELECT, INSERT ON GLPI_TICKET TO operator;
+GRANT update ON VIEW_OPERATOR_GLPI_TICKET TO operator;
+GRANT SELECT, INSERT ON GLPI_TICKET_TASK TO operator;
+GRANT SELECT, INSERT ON GLPI_TICKET_SOLUTION TO operator;
