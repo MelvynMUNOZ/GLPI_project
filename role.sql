@@ -1,32 +1,45 @@
-alter session set "_ORACLE_SCRIPT"=true; 
+ALTER SESSION SET "_ORACLE_SCRIPT"=true; 
 
--- Suppression des anciens roles (si creation deja realisee)
+----------- DROPS -----------
 
--- Création des roles pour les differents utilisateurs
+DROP ROLE ROLE_ADMIN;
+DROP ROLE ROLE_USER;
+DROP ROLE ROLE_OPERATOR;
+
+----------- ROLES -----------
 
 -- Role admin
-create role role_admin;
+CREATE ROLE ROLE_ADMIN;
 
--- autorisation du role
-grant dba to role_admin;
+GRANT CONNECT TO ROLE_ADMIN;
 
--------------------------------------
+GRANT SELECT, INSERT, UPDATE ON GLPI_TICKET TO ROLE_ADMIN;
+GRANT SELECT, INSERT, UPDATE ON GLPI_USER TO ROLE_ADMIN;
+GRANT SELECT, INSERT, UPDATE ON GLPI_TICKET_TASK TO ROLE_ADMIN;
+GRANT SELECT, INSERT, UPDATE ON GLPI_TICKET_SOLUTION TO ROLE_ADMIN;
+GRANT SELECT, INSERT, UPDATE ON GLPI_INVENTORY TO ROLE_ADMIN;
+
+GRANT SELECT ON GLPI_NOTIFICATION TO ROLE_ADMIN;
 
 -- Role user
-create role role_user;
+CREATE ROLE ROLE_USER;
 
--- autorisation du role
-grant connect to role_user;
-grant select, insert on GLPI_TICKET to role_user;
+GRANT CONNECT TO ROLE_USER;
 
--------------------------------------
+GRANT SELECT, INSERT ON VIEW_USER_GLPI_TICKET TO ROLE_USER;
+
+GRANT SELECT ON GLPI_NOTIFICATION TO ROLE_USER;
 
 -- Role Operator
-create role role_operator;
+CREATE ROLE ROLE_OPERATOR;
 
--- autorisation du role
-grant connect to role_operator;
-grant select, insert on GLPI_TICKET to role_operator;
-grant update on VIEW_OPERATOR_GLPI_TICKET to role_operator;
-grant select, insert on GLPI_TICKET_TASK to role_operator;
-grant select, insert on GLPI_TICKET_SOLUTION to role_operator;
+GRANT CONNECT TO ROLE_OPERATOR;
+
+GRANT SELECT, INSERT, UPDATE ON GLPI_TICKET TO ROLE_OPERATOR;
+GRANT SELECT, INSERT, UPDATE ON GLPI_TICKET_TASK TO ROLE_OPERATOR;
+
+GRANT SELECT, INSERT ON GLPI_TICKET_SOLUTION TO ROLE_OPERATOR;
+
+GRANT SELECT, UPDATE ON GLPI_INVENTORY TO ROLE_OPERATOR
+
+GRANT UPDATE ON VIEW_OPERATOR_GLPI_TICKET TO ROLE_OPERATOR;
