@@ -49,3 +49,44 @@ BEGIN
     END IF;
 END;
 /
+
+CREATE OR REPLACE PROCEDURE close_ticket(
+    p_ticket_id IN VARCHAR2
+) AS
+    v_approval_status NUMBER;
+BEGIN
+    -- Vérifier l'état d'approbation du ticket dans GLPI_TICKET_SOLUTION
+    SELECT approval
+    INTO v_approval_status
+    FROM GLPI_TICKET_SOLUTION
+    WHERE ID = p_ticket_id;
+
+    -- Si l'approbation n'est pas à 1, lever une exception
+    IF v_approval_status != 1 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Le ticket n''est pas approuvé pour fermeture.');
+    END IF;
+
+    -- Mise à jour du ticket spécifié pour le marquer comme fermé
+    UPDATE GLPI_TICKET
+    SET status = 'Closed',
+        date_closed = SYSDATE
+    WHERE ID = p_ticket_id;
+
+    -- Gérer les erreurs potentielles ou les cas où le ticket n'existe pas ou est déjà fermé
+    IF SQL%ROWCOUNT = 0 THEN
+        -- Aucune ligne mise à jour, ce qui peut signifier que le ticket n'existe pas ou est déjà fermé
+        RAISE_APPLICATION_ERROR(-20001, 'Le ticket spécifié ne peut être fermé ou n''existe pas.');
+    END IF;
+
+    -- Valider la transaction
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Le ticket spécifié n''existe pas dans GLPI_TICKET_SOLUTION ou n''est pas approuvé.');
+    WHEN OTHERS THEN
+        -- En cas d'erreur, annuler les modifications
+        ROLLBACK;
+        -- Relancer l'erreur
+        RAISE;
+END close_ticket;
+/
