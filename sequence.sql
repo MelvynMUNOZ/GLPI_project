@@ -11,6 +11,8 @@ DROP SEQUENCE seq_glpi_inventory_id;
 
 ----------- SEQUENCES -----------
 
+-- Sequences for primary key of tables
+
 CREATE SEQUENCE seq_glpi_ticket_id
 INCREMENT BY 1
 START WITH 1

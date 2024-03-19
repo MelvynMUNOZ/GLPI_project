@@ -7,7 +7,7 @@ Se connecter avec `system`. Executer le script :
 
 - setup.sql
 
-Se connecter avec `glpiadmin`. Executer le script :
+Se connecter avec `glpiadmin` avec le password `admin`. Executer le script :
 
 - table.sql
 - procedure.sql
