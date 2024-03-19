@@ -52,7 +52,7 @@ CREATE OR REPLACE TRIGGER trig_inventory_item_set_id
 BEFORE INSERT ON GLPI_INVENTORY
 FOR EACH ROW
 BEGIN
-    :NEW.ID := 'i' || seq_glpi_inventory_id.NEXTVAL;
+    :NEW.ID := 'i' || seq_glpi_inventory_item_id.NEXTVAL;
 END;
 /
 
