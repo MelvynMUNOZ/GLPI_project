@@ -5,6 +5,7 @@ set "file=setup.sql"
 set "tempfile=temp.txt"
 set "search=DATAFILE "
 set "sqlMDP=%1"
+cd %~dp0
 
 rem si il y a deux arguments d'entrée, mettre le deuxième dans la variable de chemin de la base de données
 if "%2"=="" (
