@@ -1,32 +1,32 @@
+alter session set "_ORACLE_SCRIPT"=true; 
+
 -- Suppression des anciens roles (si creation deja realisee)
-
-
 
 -- Création des roles pour les differents utilisateurs
 
 -- Role admin
-CREATE ROLE admin;
+create role role_admin;
 
 -- autorisation du role
-GRANT dba TO admin;
+grant dba to role_admin;
 
 -------------------------------------
 
 -- Role user
-CREATE ROLE user;
+create role role_user;
 
 -- autorisation du role
-GRANT CONNECT TO user;
-GRANT SELECT, INSERT on GLPI_TICKET TO user;
+grant connect to role_user;
+grant select, insert on GLPI_TICKET to role_user;
 
 -------------------------------------
 
 -- Role Operator
-CREATE ROLE operator;
+create role role_operator;
 
 -- autorisation du role
-GRANT CONNECT TO operator;
-GRANT SELECT, INSERT ON GLPI_TICKET TO operator;
-GRANT update ON VIEW_OPERATOR_GLPI_TICKET TO operator;
-GRANT SELECT, INSERT ON GLPI_TICKET_TASK TO operator;
-GRANT SELECT, INSERT ON GLPI_TICKET_SOLUTION TO operator;
+grant connect to role_operator;
+grant select, insert on GLPI_TICKET to role_operator;
+grant update on VIEW_OPERATOR_GLPI_TICKET to role_operator;
+grant select, insert on GLPI_TICKET_TASK to role_operator;
+grant select, insert on GLPI_TICKET_SOLUTION to role_operator;
