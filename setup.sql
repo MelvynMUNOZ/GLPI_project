@@ -22,10 +22,21 @@ DEFAULT TABLESPACE GLPI;
 
 GRANT dba TO GLPIADMIN;
 
+
+-------- LES DIFFERENTES DATABASES --------------
+
+-- TODO: Cergy
+-- creer user glpiadmin_cergy
+-- lancer les scripts 
+
+-- TODO: Pau
+-- creer user glpiadmin_pau
+-- lancer les scripts 
+
+
 connect GLPIADMIN/admin
 @table.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
 @role.sql
-

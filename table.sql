@@ -43,12 +43,15 @@ CREATE TABLE GLPI_TICKET
     DATE_CLOSED  DATE,
     OWNER_ID     VARCHAR2(16) not null,
     OPERATOR_ID  VARCHAR2(16),
+    INVENTORY_ITEM_ID     VARCHAR2(16) not null,
     constraint TABLE_NAME_PK
         primary key (ID),
     constraint GLPI_TICKET_GLPI_USER_ID_FK
         foreign key (OPERATOR_ID) references GLPI_USER,
     constraint GLPI_TICKET_GLPI_USER_ID_FK_2
         foreign key (OWNER_ID) references GLPI_USER,
+    constraint GLPI_TICKET_GLPI_USER_ID_FK_3
+        foreign key (INVENTORY_ITEM_ID) references GLPI_INVENTORY,
     constraint CATEGORY_ENUM
         check (category in ('Software', 'Hardware', 'Network', 'Others')),
     constraint IMPACT_ENUM
@@ -69,45 +72,29 @@ CREATE TABLE GLPI_TICKET
 CREATE TABLE GLPI_TICKET_TASK
 (
     ID           VARCHAR2(16) not null,
+    ID_TICKET    VARCHAR2(16) not null,
     DATE_CREATED DATE,
     DESCRIPTION  VARCHAR2(500),
     constraint GLPI_TICKET_TASK_PK
         primary key (ID)
+    constraint GLPI_TICKET_TASK_TICKET_ID_FK
+        foreign key (ID_TICKET) references GLPI_TICKET,
 ) TABLESPACE GLPI;
 
 
 CREATE TABLE GLPI_TICKET_SOLUTION
 (
     ID           VARCHAR2(16) not null,
+    ID_TICKET    VARCHAR2(16) not null,
     DATE_CREATED DATE,
     DESCRIPTION  VARCHAR2(500),
     APPROVAL     NUMBER(1) default 0,
     constraint GLPI_TICKET_SOLUTION_PK
         primary key (ID),
+    constraint GLPI_TICKET_TASK_TICKET_ID_FK
+        foreign key (ID_TICKET) references GLPI_TICKET,
     constraint APPROVAL_BOOLEAN
         check (approval in (0, 1))
-) TABLESPACE GLPI;
-
-
-CREATE TABLE LIST_TICKET_SOLUTION
-(
-    ID_TICKET          VARCHAR2(16) not null,
-    ID_TICKET_SOLUTION VARCHAR2(16) not null,
-    constraint LIST_TICKET_SOLUTION_GLPI_TICKET_ID_FK
-        foreign key (ID_TICKET) references GLPI_TICKET,
-    constraint LIST_TICKET_SOLUTION_GLPI_TICKET_SOLUTION_ID_FK
-        foreign key (ID_TICKET_SOLUTION) references GLPI_TICKET_SOLUTION
-) TABLESPACE GLPI;
-
-
-CREATE TABLE LIST_TICKET_TASK
-(
-    ID_TICKET      VARCHAR2(16) not null,
-    ID_TICKET_TASK VARCHAR2(16) not null,
-    constraint LIST_TICKET_TASK_GLPI_TICKET_ID_FK
-        foreign key (ID_TICKET) references GLPI_TICKET,
-    constraint LIST_TICKET_TASK_GLPI_TICKET_TASK_ID_FK
-        foreign key (ID_TICKET_TASK) references GLPI_TICKET_TASK
 ) TABLESPACE GLPI;
 
 
@@ -135,18 +122,4 @@ CREATE TABLE GLPI_INVENTORY
         primary key (ID),
     constraint GLPI_INVENTORY_CATEGORY_ENUM
         check (category in ('Software', 'Hardware', 'Network', 'Others'))
-) TABLESPACE GLPI;
-
-
-CREATE TABLE LIST_INVENTORY_ITEM
-(
-    ID_USER VARCHAR2(16) not null,
-    ID_ITEM VARCHAR2(16) not null,
-    QUANTITY NUMBER default 0,
-    constraint LIST_INVENTORY_ITEM_GLPI_USER_ID_FK
-        foreign key (ID_USER) references GLPI_USER,
-    constraint LIST_INVENTORY_ITEM_ID_ITEM_FK
-        foreign key (ID_ITEM) references GLPI_INVENTORY,
-    constraint QUANTITY_POSITIVE
-        check (quantity >= 0)
 ) TABLESPACE GLPI;
