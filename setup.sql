@@ -22,3 +22,10 @@ DEFAULT TABLESPACE GLPI;
 
 GRANT dba TO GLPIADMIN;
 
+connect GLPIADMIN/admin
+@table.sql
+@procedure.sql
+@sequence.sql
+@trigger.sql
+@role.sql
+

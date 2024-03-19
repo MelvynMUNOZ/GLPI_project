@@ -15,6 +15,3 @@ Se connecter avec `glpiadmin` avec le password `admin`. Executer le script :
 - trigger.sql
 - role.sql
 
-OU
-
-setupBatch.bat "SQLPLUS_PASSWORD"
