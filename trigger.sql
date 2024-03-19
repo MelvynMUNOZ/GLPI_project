@@ -47,17 +47,8 @@ BEGIN
 END;
 /
 
---Trigger pour affecter un id valide aux lignes de la table GLPI_JOURNAL
-CREATE OR REPLACE TRIGGER trig_journal_set_id
-BEFORE INSERT ON GLPI_JOURNAL
-FOR EACH ROW
-BEGIN
-    :NEW.ID := 'j' || seq_glpi_journal_id.NEXTVAL;
-END;
-/
-
 --Trigger pour affecter un id valide aux lignes de la table GLPI_INVENTORY
-CREATE OR REPLACE TRIGGER trig_inventory_set_id
+CREATE OR REPLACE TRIGGER trig_inventory_item_set_id
 BEFORE INSERT ON GLPI_INVENTORY
 FOR EACH ROW
 BEGIN
