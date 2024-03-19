@@ -26,32 +26,6 @@ CREATE TABLE GLPI_USER
 ) TABLESPACE GLPI;
 
 
-CREATE TABLE GLPI_INVENTORY
-(
-    ID        VARCHAR2(16)  not null,
-    CATEGORY  VARCHAR2(16)  not null,
-    REFERENCE VARCHAR2(100) not null,
-    constraint GLPI_INVENTORY_PK
-        primary key (ID),
-    constraint CATEGORY_ENUM
-        check (category in ('Software', 'Hardware', 'Network', 'Others'))
-) TABLESPACE GLPI;
-
-
-CREATE TABLE LIST_INVENTORY_ITEM
-(
-    ID_USER VARCHAR2(16) not null,
-    ID_ITEM VARCHAR2(16) not null,
-    constraint LIST_INVENTORY_ITEM_GLPI_USER_ID_FK
-        foreign key (ID_USER) references GLPI_USER,
-    constraint LIST_INVENTORY_ITEM_ID_ITEM_FK
-        foreign key (ID_ITEM) references GLPI_INVENTORY
-    QUANTITY  NUMBER default 0,
-    constraint QUANTITY_POSITIVE
-        check (quantity >= 0)
-) TABLESPACE GLPI;
-
-
 CREATE TABLE GLPI_TICKET
 (
     ID           VARCHAR2(16) not null,
@@ -149,4 +123,30 @@ CREATE TABLE GLPI_NOTIFICATION
     CONSTRAINT FK_GLPI_NOTIFICATION_USER_ID FOREIGN KEY (USER_ID) REFERENCES GLPI_USER(ID), -- Clé étrangère vers la table GLPI_USER
     CONSTRAINT FK_GLPI_NOTIFICATION_OPERATOR_ID FOREIGN KEY (OPERATOR_ID) REFERENCES GLPI_USER(ID), -- Clé étrangère vers la table GLPI_USER
     CONSTRAINT FK_GLPI_NOTIFICATION_TICKET_ID FOREIGN KEY (TICKET_ID) REFERENCES GLPI_TICKET(ID) -- Clé étrangère vers la table GLPI_TICKET
+) TABLESPACE GLPI;
+
+
+CREATE TABLE GLPI_INVENTORY
+(
+    ID        VARCHAR2(16)  not null,
+    CATEGORY  VARCHAR2(16)  not null,
+    REFERENCE VARCHAR2(100) not null,
+    constraint GLPI_INVENTORY_PK
+        primary key (ID),
+    constraint GLPI_INVENTORY_CATEGORY_ENUM
+        check (category in ('Software', 'Hardware', 'Network', 'Others'))
+) TABLESPACE GLPI;
+
+
+CREATE TABLE LIST_INVENTORY_ITEM
+(
+    ID_USER VARCHAR2(16) not null,
+    ID_ITEM VARCHAR2(16) not null,
+    QUANTITY NUMBER default 0,
+    constraint LIST_INVENTORY_ITEM_GLPI_USER_ID_FK
+        foreign key (ID_USER) references GLPI_USER,
+    constraint LIST_INVENTORY_ITEM_ID_ITEM_FK
+        foreign key (ID_ITEM) references GLPI_INVENTORY,
+    constraint QUANTITY_POSITIVE
+        check (quantity >= 0)
 ) TABLESPACE GLPI;
