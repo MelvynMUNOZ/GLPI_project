@@ -14,3 +14,7 @@ Se connecter avec `glpiadmin` avec le password `admin`. Executer le script :
 - sequence.sql
 - trigger.sql
 - role.sql
+
+OU
+
+setupBatch.bat "SQLPLUS_PASSWORD"
