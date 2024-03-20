@@ -2,6 +2,13 @@
 
 -------------- PROCEDURES --------------
 
+DROP PROCEDURE fn_notify_ticket_status_changed;
+DROP PROCEDURE fn_get_ticket_priority;
+DROP PROCEDURE close_ticket;
+DROP PROCEDURE fn_insert_glpi_user;
+
+
+
 -- Procédure pour notifier un utilisateur lorsqu'un ticket change de statut
 CREATE OR REPLACE PROCEDURE fn_notify_ticket_status_changed (
     p_user_id VARCHAR2,
@@ -90,3 +97,29 @@ EXCEPTION
         RAISE;
 END close_ticket;
 /
+
+-- Procédure d'insertion dans la table GLPI_USER
+CREATE OR REPLACE PROCEDURE fn_insert_glpi_user (
+    p_name  IN  VARCHAR2,
+    p_email IN  VARCHAR2
+)
+AS
+BEGIN
+    -- Insérer les données
+    INSERT INTO GLPI_USER (NAME, EMAIL)
+    VALUES (p_name, p_email);
+    
+    COMMIT;
+
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Erreur lors de l''insertion : Cet utilisateur existe déjà');
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20002, 'Erreur lors de l''insertion : ' || SQLERRM);
+    
+END fn_insert_glpi_user;
+/
+
+
