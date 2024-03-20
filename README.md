@@ -1,17 +1,16 @@
 # GLPI_project
 Projet BDD : gestion ticket
 
-## Ordre de lancement des scripts
+## Prerecquis
 
-Se connecter avec `system`. Executer le script :
+Oracle Database XE 21c
 
-- setup.sql
+## Execution
 
-Se connecter avec `glpiadmin` avec le password `admin`. Executer le script :
+Lancer `sqlplus` dans le repertoire des scripts sql.
 
-- table.sql
-- procedure.sql
-- sequence.sql
-- trigger.sql
-- role.sql
+Se connecter avec `system`. Executer le script `setup.sql`
 
+```sql
+@setup.sql
+```
