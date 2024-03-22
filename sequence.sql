@@ -1,11 +1,11 @@
 ----------- DROPS -----------
 
-DROP SEQUENCE seq_glpi_user_id;
-DROP SEQUENCE seq_glpi_ticket_id;
-DROP SEQUENCE seq_glpi_ticket_task_id;
-DROP SEQUENCE seq_glpi_ticket_solution_id;
-DROP SEQUENCE seq_glpi_notification_id;
-DROP SEQUENCE seq_glpi_inventory_id;
+DROP SEQUENCE IF EXIST seq_glpi_user_id;
+DROP SEQUENCE IF EXIST seq_glpi_ticket_id;
+DROP SEQUENCE IF EXIST seq_glpi_ticket_task_id;
+DROP SEQUENCE IF EXIST seq_glpi_ticket_solution_id;
+DROP SEQUENCE IF EXIST seq_glpi_notification_id;
+DROP SEQUENCE IF EXIST seq_glpi_inventory_item_id;
 
 
 ----------- SEQUENCES -----------
