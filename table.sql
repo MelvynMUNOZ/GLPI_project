@@ -28,8 +28,11 @@ CREATE TABLE GLPI_INVENTORY
     ID        VARCHAR2(16)  not null,
     CATEGORY  VARCHAR2(16)  not null,
     REFERENCE VARCHAR2(100) not null,
+    OWNER_ID     VARCHAR2(16) not null,
     constraint GLPI_INVENTORY_PK
         primary key (ID),
+    constraint GLPI_INVENTORY_GLPI_OWNER_ID_FK
+        foreign key (OWNER_ID) references GLPI_USER,
     constraint GLPI_INVENTORY_CATEGORY_ENUM
         check (category in ('Software', 'Hardware', 'Network', 'Others'))
 ) TABLESPACE GLPI;

@@ -30,3 +30,7 @@ exec fn_insert_glpi_user( 'Liam Davis', 'liam.davis@example.com' );
 exec fn_insert_glpi_user( 'Zoe Johnson', 'zoe.johnson@example.com');
 exec fn_insert_glpi_user( 'Elijah Wilson', 'elijah.wilson@example.com');
 exec fn_insert_glpi_user( 'Nora Garcia', 'nora.garcia@example.com');
+
+exec fn_insert_glpi_inventory('Software','Gros caca','u2');
+
+exec fn_insert_glpi_ticket ('Incident','Software','Low','Low','Low','Grocacaquipu','il pu vraiment beaucoup','u1','u2','i1');

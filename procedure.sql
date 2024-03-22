@@ -140,3 +140,74 @@ END fn_attribute_ticket;
 
 
 
+CREATE OR REPLACE PROCEDURE fn_insert_glpi_ticket (
+    p_type         IN VARCHAR2,
+    p_category     IN VARCHAR2,
+    p_impact       IN VARCHAR2,
+    p_urgency      IN VARCHAR2,
+    p_priority     IN VARCHAR2,
+    p_title        IN VARCHAR2,
+    p_description  IN VARCHAR2,
+    p_owner_id     IN VARCHAR2,
+    p_operator_id  IN VARCHAR2,
+    p_inventory_item_id IN VARCHAR2
+)
+AS
+BEGIN
+    INSERT INTO GLPI_TICKET (
+        TYPE,
+        CATEGORY,
+        IMPACT,
+        STATUS,
+        URGENCY,
+        PRIORITY,
+        TITLE,
+        DESCRIPTION,
+        OWNER_ID,
+        OPERATOR_ID,
+        INVENTORY_ITEM_ID
+    ) VALUES (
+        p_type,
+        p_category,
+        p_impact,
+        'Waiting',
+        p_urgency,
+        p_priority,
+        p_title,
+        p_description,
+        p_owner_id,
+        p_operator_id,
+        p_inventory_item_id
+    );
+    
+    COMMIT;
+    
+    DBMS_OUTPUT.PUT_LINE('Data inserted successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Error inserting data: ' || SQLERRM);
+END fn_insert_glpi_ticket;
+/
+
+
+
+CREATE OR REPLACE PROCEDURE fn_insert_glpi_inventory (
+    p_category  IN VARCHAR2,
+    p_reference IN VARCHAR2,
+    p_owner_id  IN VARCHAR2
+)
+AS
+BEGIN
+    INSERT INTO GLPI_INVENTORY ( CATEGORY, REFERENCE, OWNER_ID)
+    VALUES ( p_category, p_reference, p_owner_id);
+    
+    COMMIT;
+    
+    DBMS_OUTPUT.PUT_LINE('Data inserted successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Error inserting data: ' || SQLERRM);
+END fn_insert_glpi_inventory;
+/
