@@ -5,38 +5,63 @@ ALTER SESSION SET "_ORACLE_SCRIPT"=true;
 
 ------------ DROPS --------------
 
-DROP TABLESPACE GLPI INCLUDING CONTENTS AND DATAFILES;
+DROP TABLESPACE IF EXIST GLPI INCLUDING CONTENTS AND DATAFILES;
 
-DROP USER GLPIADMIN CASCADE;
+DROP USER IF EXIST GLPI_CERGY CASCADE;
+DROP USER IF EXIST GLPI_PAU CASCADE;
+DROP USER IF EXIST GLPI CASCADE;
+
+DROP DATABASE LINK db_cergy;
+DROP DATABASE LINK db_pau;
 
 
--------- TABLESPACE & ADMIN --------------
+-------- TABLESPACE & ADMINS --------------
 
 CREATE TABLESPACE GLPI 
 DATAFILE 'C:\Oracle\21c\oradata\XE\GLPI.DBF' 
 SIZE 500M;
 
-CREATE USER GLPIADMIN 
+-- Global admin
+CREATE USER GLPI 
 IDENTIFIED BY admin 
 DEFAULT TABLESPACE GLPI;
 
-GRANT dba TO GLPIADMIN;
+GRANT dba TO GLPI;
 
+-- Cergy Database (admin)
+CREATE USER GLPI_CERGY 
+IDENTIFIED BY admin_cergy
+DEFAULT TABLESPACE GLPI;
 
--------- LES DIFFERENTES DATABASES --------------
+GRANT dba TO GLPI_CERGY;
 
--- TODO: Cergy
--- creer user glpiadmin_cergy
--- lancer les scripts 
+-- Pau Database (admin) 
+CREATE USER GLPI_PAU 
+IDENTIFIED BY admin_pau
+DEFAULT TABLESPACE GLPI;
 
--- TODO: Pau
--- creer user glpiadmin_pau
--- lancer les scripts 
+GRANT dba TO GLPI_PAU;
 
+.
+-------- DATABASES SETUP --------------
 
-connect GLPIADMIN/admin
+-- Setup database Cergy
+connect GLPI_CERGY/admin_cergy
 @table.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
 @role.sql
+
+-- Setup database Pau
+connect GLPI_PAU/admin_pau
+@table.sql
+@procedure.sql
+@sequence.sql
+@trigger.sql
+@role.sql
+
+-- Admin global - setup databases link
+connect GLPI/admin
+create database link db_cergy connect to GLPI_CERGY identified by admin_cergy using 'XE';
+create database link db_pau connect to GLPI_PAU identified by admin_pau using 'XE';
