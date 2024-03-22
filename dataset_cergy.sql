@@ -1,23 +1,12 @@
 -- USERS --
 
-exec fn_insert_glpi_user( 'Olivia Garcia', 'olivia.garcia@example.com' );
-exec fn_insert_glpi_user( 'William Martinez', 'william.martinez@example.com');
-exec fn_insert_glpi_user( 'Sophia Taylor', 'sophia.taylor@example.com' );
-exec fn_insert_glpi_user( 'Alexander Brown', 'alexander.brown@example.com');
-exec fn_insert_glpi_user( 'Charlotte Davis', 'charlotte.davis@example.com');
-exec fn_insert_glpi_user( 'Ethan Johnson', 'ethan.johnson@example.com');
-exec fn_insert_glpi_user( 'Ava Wilson', 'ava.wilson@example.com' );
-exec fn_insert_glpi_user( 'Logan Garcia', 'logan.garcia@example.com');
-exec fn_insert_glpi_user( 'Mia Martinez', 'mia.martinez@example.com' );
-exec fn_insert_glpi_user( 'Benjamin Thompson', 'benjamin.thompson@example.com');
-exec fn_insert_glpi_user( 'Harper Wilson', 'harper.wilson@example.com' );
-exec fn_insert_glpi_user( 'Evelyn Garcia', 'evelyn.garcia@example.com');
-exec fn_insert_glpi_user( 'Sebastian Taylor', 'sebastian.taylor@example.com' );
-exec fn_insert_glpi_user( 'Camila Brown', 'camila.brown@example.com');
-exec fn_insert_glpi_user( 'Liam Davis', 'liam.davis@example.com' );
-exec fn_insert_glpi_user( 'Zoe Johnson', 'zoe.johnson@example.com');
-exec fn_insert_glpi_user( 'Elijah Wilson', 'elijah.wilson@example.com');
-exec fn_insert_glpi_user( 'Nora Garcia', 'nora.garcia@example.com');
+exec fn_insert_glpi_user( 'Olivia Garcia', 'olivia.garcia@example.com','User' );
+exec fn_insert_glpi_user( 'William Martinez', 'william.martinez@example.com','User');
+exec fn_insert_glpi_user( 'Sophia Taylor', 'sophia.taylor@example.com' ,'User');
+exec fn_insert_glpi_user( 'Alexander Brown', 'alexander.brown@example.com','User');
+exec fn_insert_glpi_user( 'Charlotte Davis', 'charlotte.davis@example.com','User');
+exec fn_insert_glpi_user( 'Ethan Johnson', 'ethan.johnson@example.com','Operator');
+exec fn_insert_glpi_user( 'Ava Wilson', 'ava.wilson@example.com','Operator' );
 
 exec fn_insert_glpi_inventory('Software','RStudio','u1');
 exec fn_insert_glpi_inventory('Software','Photoshop','u1');

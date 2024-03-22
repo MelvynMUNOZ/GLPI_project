@@ -1,17 +1,12 @@
 -- USERS --
 
-exec fn_insert_glpi_user('John Doe', 'john.doe@example.com', 'Cergy');
-exec fn_insert_glpi_user('Jane Smith', 'jane.smith@example.com');
-exec fn_insert_glpi_user('Alice Smith', 'alice.smith@example.com' );
-exec fn_insert_glpi_user('Sarah Johnson', 'sarah.johnson@example.com');
-exec fn_insert_glpi_user('Michael Brown', 'michael.brown@example.com' );
-exec fn_insert_glpi_user('Emily Wilson', 'emily.wilson@example.com');
-exec fn_insert_glpi_user('David Martinez', 'david.martinez@example.com' );
-exec fn_insert_glpi_user('Jennifer Taylor', 'jennifer.taylor@example.com');
-exec fn_insert_glpi_user('Daniel Garcia', 'daniel.garcia@example.com' );
-exec fn_insert_glpi_user( 'Jessica Davis', 'jessica.davis@example.com');
-exec fn_insert_glpi_user( 'Emma Thompson', 'emma.thompson@example.com');
-exec fn_insert_glpi_user( 'James Wilson', 'james.wilson@example.com');
+exec fn_insert_glpi_user('John Doe', 'john.doe@example.com', 'Cergy','User');
+exec fn_insert_glpi_user('Jane Smith', 'jane.smith@example.com','User');
+exec fn_insert_glpi_user('Alice Smith', 'alice.smith@example.com','User' );
+exec fn_insert_glpi_user('Sarah Johnson', 'sarah.johnson@example.com','User');
+exec fn_insert_glpi_user('Michael Brown', 'michael.brown@example.com' ,'User');
+exec fn_insert_glpi_user('Emily Wilson', 'emily.wilson@example.com','Operator');
+exec fn_insert_glpi_user('David Martinez', 'david.martinez@example.com','Operator' );
 
 
 exec fn_insert_glpi_inventory('Software','DataGrip','u1');

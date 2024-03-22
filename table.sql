@@ -15,9 +15,12 @@ CREATE TABLE GLPI_USER
     ID           VARCHAR2(16) not null,
     NAME         VARCHAR2(50) not null,
     EMAIL        VARCHAR2(50) not null,
+    ROLE         VARCHAR2(16) not null,
     constraint GLPI_USER_PK
         primary key (ID),
-    constraint UNIQUE_EMAIL unique (EMAIL)
+    constraint UNIQUE_EMAIL unique (EMAIL),
+    constraint ROLE_ENUM
+        check (role in ('Operator', 'User'))
 ) TABLESPACE GLPI;
 
 CREATE TABLE GLPI_INVENTORY

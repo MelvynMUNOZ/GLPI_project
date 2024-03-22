@@ -103,12 +103,13 @@ END fn_close_ticket;
 -- Procédure d'insertion dans la table GLPI_USER
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_user (
     p_name  IN  VARCHAR2,
-    p_email IN  VARCHAR2
+    p_email IN  VARCHAR2,
+    p_role  IN  VARCHAR2
 ) AS
 BEGIN
     -- Insérer les données
-    INSERT INTO GLPI_USER (NAME, EMAIL)
-    VALUES (p_name, p_email);
+    INSERT INTO GLPI_USER (NAME, EMAIL, ROLE)
+    VALUES (p_name, p_email, p_role);
     
     COMMIT;
 
