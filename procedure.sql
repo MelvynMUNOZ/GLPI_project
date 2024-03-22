@@ -96,7 +96,7 @@ EXCEPTION
         ROLLBACK;
         -- Relancer l'erreur
         RAISE;
-END close_ticket;
+END fn_close_ticket;
 /
 
 -- Procédure d'insertion dans la table GLPI_USER
@@ -131,7 +131,7 @@ BEGIN
     -- Insérer les données
     UPDATE GLPI_TICKET
     SET status = 'Attributed',
-        OWNER_ID = p_operator_id
+        OPERATOR_ID = p_operator_id
     WHERE ID = p_ticket_id;
 
 COMMIT ;
@@ -149,7 +149,6 @@ CREATE OR REPLACE PROCEDURE fn_insert_glpi_ticket (
     p_title        IN VARCHAR2,
     p_description  IN VARCHAR2,
     p_owner_id     IN VARCHAR2,
-    p_operator_id  IN VARCHAR2,
     p_inventory_item_id IN VARCHAR2
 )
 AS
@@ -164,7 +163,6 @@ BEGIN
         TITLE,
         DESCRIPTION,
         OWNER_ID,
-        OPERATOR_ID,
         INVENTORY_ITEM_ID
     ) VALUES (
         p_type,
@@ -176,7 +174,6 @@ BEGIN
         p_title,
         p_description,
         p_owner_id,
-        p_operator_id,
         p_inventory_item_id
     );
     

@@ -16,7 +16,7 @@ exec fn_insert_glpi_user( 'Olivia Garcia', 'olivia.garcia@example.com' );
 exec fn_insert_glpi_user( 'William Martinez', 'william.martinez@example.com');
 exec fn_insert_glpi_user( 'Sophia Taylor', 'sophia.taylor@example.com' );
 exec fn_insert_glpi_user( 'Alexander Brown', 'alexander.brown@example.com');
-exec fn_insert_glpi_user( 'Charlotte Davis', 'charlotte.davis@example.com', );
+exec fn_insert_glpi_user( 'Charlotte Davis', 'charlotte.davis@example.com');
 exec fn_insert_glpi_user( 'Ethan Johnson', 'ethan.johnson@example.com');
 exec fn_insert_glpi_user( 'Ava Wilson', 'ava.wilson@example.com' );
 exec fn_insert_glpi_user( 'Logan Garcia', 'logan.garcia@example.com');
@@ -33,4 +33,9 @@ exec fn_insert_glpi_user( 'Nora Garcia', 'nora.garcia@example.com');
 
 exec fn_insert_glpi_inventory('Software','Gros caca','u2');
 
-exec fn_insert_glpi_ticket ('Incident','Software','Low','Low','Low','Grocacaquipu','il pu vraiment beaucoup','u1','u2','i1');
+exec fn_insert_glpi_ticket ('Incident','Software','Low','Low','Low','Grocacaquipu','il pu vraiment beaucoup','u1','i1');
+
+exec fn_attribute_ticket ('t1','u2');
+
+
+
