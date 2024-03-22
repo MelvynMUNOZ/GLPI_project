@@ -71,9 +71,9 @@ CREATE TABLE GLPI_TICKET_TASK
     DATE_CREATED DATE,
     DESCRIPTION  VARCHAR2(500),
     constraint GLPI_TICKET_TASK_PK
-        primary key (ID)
+        primary key (ID),
     constraint GLPI_TICKET_TASK_TICKET_ID_FK
-        foreign key (ID_TICKET) references GLPI_TICKET,
+        foreign key (ID_TICKET) references GLPI_TICKET
 ) TABLESPACE GLPI;
 
 
