@@ -6,6 +6,7 @@ DROP PROCEDURE fn_notify_ticket_status_changed;
 DROP PROCEDURE fn_get_ticket_priority;
 DROP PROCEDURE close_ticket;
 DROP PROCEDURE fn_insert_glpi_user;
+DROP PROCEDURE fn_attribute_ticket;
 
 
 
@@ -57,7 +58,7 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE PROCEDURE close_ticket(
+CREATE OR REPLACE PROCEDURE fn_close_ticket(
     p_ticket_id IN VARCHAR2
 ) AS
     v_approval_status NUMBER;
@@ -102,8 +103,7 @@ END close_ticket;
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_user (
     p_name  IN  VARCHAR2,
     p_email IN  VARCHAR2
-)
-AS
+) AS
 BEGIN
     -- Insérer les données
     INSERT INTO GLPI_USER (NAME, EMAIL)
@@ -121,5 +121,22 @@ EXCEPTION
     
 END fn_insert_glpi_user;
 /
+
+CREATE OR REPLACE PROCEDURE fn_attribute_ticket (
+    p_ticket_id IN VARCHAR2,
+    p_operator_id IN VARCHAR2
+)
+AS
+BEGIN
+    -- Insérer les données
+    UPDATE GLPI_TICKET
+    SET status = 'Attributed',
+        OWNER_ID = p_operator_id
+    WHERE ID = p_ticket_id;
+
+COMMIT ;
+END fn_attribute_ticket;
+/
+
 
 
