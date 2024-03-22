@@ -48,6 +48,7 @@ GRANT dba TO GLPI_PAU;
 -- Setup database Cergy
 connect GLPI_CERGY/admin_cergy
 @table.sql
+@view.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
@@ -56,6 +57,7 @@ connect GLPI_CERGY/admin_cergy
 -- Setup database Pau
 connect GLPI_PAU/admin_pau
 @table.sql
+@view.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
