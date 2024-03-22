@@ -259,7 +259,7 @@ BEGIN
         fn_close_ticket(p_ticket_id, p_solution_id);
     ELSE
         -- Lever une exception si le ticket n'est pas en attente d'approbation.
-        RAISE_APPLICATION_ERROR(-20005, 'Le ticket n''est pas en attente d''approbation.');
+        RAISE_APPLICATION_ERROR(-20007, 'Le ticket n''est pas en attente d''approbation.');
     END IF;
 
     -- Appliquer les modifications.

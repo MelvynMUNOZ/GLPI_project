@@ -70,7 +70,7 @@ CREATE TABLE GLPI_TICKET
     constraint PRIORITY_ENUM
         check (priority in ('Low', 'Medium', 'High')),
     constraint STATUS_ENUM
-        check (status in ('Waiting', 'Attributed', 'Rejected', 'Resolved', 'Closed', 'Deleted')),
+        check (status in ('Waiting', 'Attributed', 'Resolved', 'Closed', 'Deleted')),
     constraint TYPE_ENUM
         check (type in ('Incident', 'Request')),
     constraint URGENCY_ENUM
