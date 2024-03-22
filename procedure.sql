@@ -59,7 +59,8 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE fn_close_ticket(
-    p_ticket_id IN VARCHAR2
+    p_ticket_id IN VARCHAR2,
+    p_solution_id IN VARCHAR2
 ) AS
     v_approval_status NUMBER;
 BEGIN
@@ -67,7 +68,7 @@ BEGIN
     SELECT approval
     INTO v_approval_status
     FROM GLPI_TICKET_SOLUTION
-    WHERE ID = p_ticket_id;
+    WHERE ID_TICKET = p_ticket_id;
 
     -- Si l'approbation n'est pas à 1, lever une exception
     IF v_approval_status != 1 THEN
@@ -207,4 +208,60 @@ EXCEPTION
         ROLLBACK;
         RAISE_APPLICATION_ERROR(-20001, 'Error inserting data: ' || SQLERRM);
 END fn_insert_glpi_inventory;
+/
+
+CREATE OR REPLACE PROCEDURE fn_resolved_ticket (
+    p_ticket_id IN VARCHAR2
+)AS
+  solution_count NUMBER;
+BEGIN
+  -- Compter le nombre de solutions pour l'ID de ticket donné.
+  SELECT COUNT(*)
+  INTO solution_count
+  FROM GLPI_TICKET_SOLUTION
+  WHERE ID_TICKET = p_ticket_id;
+
+  -- Vérifier s'il existe au moins une solution pour ce ticket.
+  IF solution_count > 0 THEN
+    -- Mise à jour de l'état du ticket à 'Resolved'.
+    UPDATE GLPI_TICKET
+    SET STATUS = 'Resolved'
+    WHERE ID = p_ticket_id;
+  ELSE
+    -- Lever une exception si aucune solution n'est trouvée pour ce ticket.
+    RAISE_APPLICATION_ERROR(-20004, 'Aucune solution trouvée pour ce ticket, impossible de le résoudre.');
+  END IF;
+
+  -- Appliquer les modifications.
+  COMMIT;
+END fn_resolved_ticket;
+/
+
+CREATE OR REPLACE PROCEDURE fn_approve_ticket (
+    p_ticket_id IN VARCHAR2,
+    p_solution_id IN VARCHAR2
+)AS
+    ticket_status VARCHAR2(16);
+BEGIN
+    -- Récupérer le statut actuel du ticket.
+    SELECT STATUS
+    INTO ticket_status
+    FROM GLPI_TICKET
+    WHERE ID = p_ticket_id;
+
+    -- Vérifier si le ticket est actuellement en attente d'approbation.
+    IF ticket_status = 'Resolved' THEN
+        -- Approuver la solution.
+        UPDATE GLPI_TICKET_SOLUTION
+        SET APPROVAL = 1
+        WHERE ID = p_solution_id;
+        fn_close_ticket(p_ticket_id, p_solution_id);
+    ELSE
+        -- Lever une exception si le ticket n'est pas en attente d'approbation.
+        RAISE_APPLICATION_ERROR(-20005, 'Le ticket n''est pas en attente d''approbation.');
+    END IF;
+
+    -- Appliquer les modifications.
+    COMMIT;
+END fn_approve_ticket;
 /
