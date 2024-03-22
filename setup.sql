@@ -42,7 +42,7 @@ DEFAULT TABLESPACE GLPI;
 
 GRANT dba TO GLPI_PAU;
 
-.
+
 -------- DATABASES SETUP --------------
 
 -- Setup database Cergy
