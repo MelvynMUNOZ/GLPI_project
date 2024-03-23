@@ -81,27 +81,27 @@ CREATE TABLE GLPI_TICKET
 CREATE TABLE GLPI_TICKET_TASK
 (
     ID           VARCHAR2(16) not null,
-    ID_TICKET    VARCHAR2(16) not null,
+    TICKET_ID    VARCHAR2(16) not null,
     DATE_CREATED DATE,
     DESCRIPTION  VARCHAR2(500),
     constraint GLPI_TICKET_TASK_PK
         primary key (ID),
     constraint GLPI_TICKET_TASK_TICKET_ID_FK
-        foreign key (ID_TICKET) references GLPI_TICKET
+        foreign key (TICKET_ID) references GLPI_TICKET
 ) TABLESPACE GLPI;
 
 
 CREATE TABLE GLPI_TICKET_SOLUTION
 (
     ID           VARCHAR2(16) not null,
-    ID_TICKET    VARCHAR2(16) not null,
+    TICKET_ID    VARCHAR2(16) not null,
     DATE_CREATED DATE,
     DESCRIPTION  VARCHAR2(500),
     APPROVAL     NUMBER(1) default 0,
     constraint GLPI_TICKET_SOLUTION_PK
         primary key (ID),
     constraint GLPI_TICKET_SOLUTION_TICKET_ID_FK
-        foreign key (ID_TICKET) references GLPI_TICKET,
+        foreign key (TICKET_ID) references GLPI_TICKET,
     constraint APPROVAL_BOOLEAN
         check (approval in (0, 1))
 ) TABLESPACE GLPI;
