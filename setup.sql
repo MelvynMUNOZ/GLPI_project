@@ -21,7 +21,7 @@ CREATE TABLESPACE GLPI
 DATAFILE 'C:\Oracle\21c\oradata\XE\GLPI.DBF'
 SIZE 500M;
 
--- Global admin
+-- Global central database
 CREATE USER GLPI 
 IDENTIFIED BY admin 
 DEFAULT TABLESPACE GLPI;
@@ -63,7 +63,8 @@ connect GLPI_PAU/admin_pau
 @trigger.sql
 @role.sql
 
--- Admin global - setup databases link
+-- Setup global central database
 connect GLPI/admin
 create database link db_cergy connect to GLPI_CERGY identified by admin_cergy using 'XE';
 create database link db_pau connect to GLPI_PAU identified by admin_pau using 'XE';
+@admin_view.sql --TODO: FIX errors

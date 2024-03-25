@@ -18,11 +18,11 @@ Se connecter avec `system`. Executer le script `setup.sql` :
 Utiliser la database Cergy. Se connecter avec `GLPI_CERGY` :
 
 ```sql
-connect GLPI_CERGY/admin_cergy;
+connect GLPI_CERGY/admin_cergy
 ```
 
 Utiliser la database Pau. Se connecter avec `GLPI_PAU` :
 
 ```sql
-connect GLPI_PAU/admin_pau;
+connect GLPI_PAU/admin_pau
 ```

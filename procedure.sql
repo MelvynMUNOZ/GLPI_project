@@ -1,14 +1,23 @@
 -- Ce fichier répertorie les procédures stockées qui seront utilisées dans le projet
 
--------------- PROCEDURES --------------
+-------------- DROPS --------------
 
-DROP PROCEDURE fn_notify_ticket_status_changed;
 DROP PROCEDURE fn_get_ticket_priority;
-DROP PROCEDURE fn_close_ticket;
-DROP PROCEDURE fn_insert_glpi_user;
 DROP PROCEDURE fn_attribute_ticket;
+DROP PROCEDURE fn_resolve_ticket;
+DROP PROCEDURE fn_approve_ticket;
+DROP PROCEDURE fn_close_ticket;
+
+DROP PROCEDURE fn_insert_glpi_user;
+DROP PROCEDURE fn_insert_glpi_inventory;
+
+DROP PROCEDURE fn_insert_glpi_ticket;
+DROP PROCEDURE fn_notify_ticket_status_changed;
+DROP PROCEDURE fn_insert_glpi_task;
+DROP PROCEDURE fn_insert_glpi_solution;
 
 
+-------------- PROCEDURES --------------
 
 -- Procédure pour calculer la priorité d'un ticket
 CREATE OR REPLACE PROCEDURE fn_get_ticket_priority(
@@ -44,8 +53,6 @@ BEGIN
 END;
 /
 
----------- PROCEDURES MISE A JOUR ----------
-
 -- Procédure pour attribuer un ticket à un opérateur
 CREATE OR REPLACE PROCEDURE fn_attribute_ticket (
     p_ticket_id IN VARCHAR2,
@@ -63,11 +70,69 @@ COMMIT ;
 END fn_attribute_ticket;
 /
 
+-- Procédure pour modifier le statut d'un ticket en résolu
+CREATE OR REPLACE PROCEDURE fn_resolve_ticket (
+    p_ticket_id IN VARCHAR2
+) IS
+    v_solution_count NUMBER;
+BEGIN
+  -- Compter le nombre de solutions pour l'ID de ticket donné.
+  SELECT COUNT(*)
+  INTO v_solution_count
+  FROM GLPI_TICKET_SOLUTION
+  WHERE TICKET_ID = p_ticket_id;
+
+  -- Vérifier s'il existe au moins une solution pour ce ticket.
+  IF v_solution_count > 0 THEN
+    -- Mise à jour de l'état du ticket à 'Resolved'.
+    UPDATE GLPI_TICKET
+    SET STATUS = 'Resolved'
+    WHERE ID = p_ticket_id;
+  ELSE
+    -- Lever une exception si aucune solution n'est trouvée pour ce ticket.
+    RAISE_APPLICATION_ERROR(-20004, 'Aucune solution trouvée pour ce ticket, impossible de le résoudre.');
+  END IF;
+
+  -- Appliquer les modifications.
+  COMMIT;
+END fn_resolved_ticket;
+/
+
+-- Procédure pour modifier le statut d'un ticket en approuvé
+CREATE OR REPLACE PROCEDURE fn_approve_ticket (
+    p_ticket_id IN VARCHAR2,
+    p_solution_id IN VARCHAR2
+) IS
+    v_ticket_status VARCHAR2(16);
+BEGIN
+    -- Récupérer le statut actuel du ticket.
+    SELECT STATUS
+    INTO v_ticket_status
+    FROM GLPI_TICKET
+    WHERE ID = p_ticket_id;
+
+    -- Vérifier si le ticket est actuellement en attente d'approbation.
+    IF v_ticket_status = 'Resolved' THEN
+        -- Approuver la solution.
+        UPDATE GLPI_TICKET_SOLUTION
+        SET APPROVAL = 1
+        WHERE ID = p_solution_id;
+        fn_close_ticket(p_ticket_id, p_solution_id);
+    ELSE
+        -- Lever une exception si le ticket n'est pas en attente d'approbation.
+        RAISE_APPLICATION_ERROR(-20007, 'Le ticket n''est pas en attente d''approbation.');
+    END IF;
+
+    -- Appliquer les modifications.
+    COMMIT;
+END fn_approve_ticket;
+/
+
 -- Procédure pour fermer un ticket
 CREATE OR REPLACE PROCEDURE fn_close_ticket(
     p_ticket_id IN VARCHAR2,
     p_solution_id IN VARCHAR2
-) AS
+) IS
     v_approval_status NUMBER;
 BEGIN
     -- Vérifier l'état d'approbation du ticket dans GLPI_TICKET_SOLUTION
@@ -106,66 +171,6 @@ EXCEPTION
 END fn_close_ticket;
 /
 
--- Procédure pour modifier le statut d'un ticket en approuvé
-CREATE OR REPLACE PROCEDURE fn_approve_ticket (
-    p_ticket_id IN VARCHAR2,
-    p_solution_id IN VARCHAR2
-)AS
-    ticket_status VARCHAR2(16);
-BEGIN
-    -- Récupérer le statut actuel du ticket.
-    SELECT STATUS
-    INTO ticket_status
-    FROM GLPI_TICKET
-    WHERE ID = p_ticket_id;
-
-    -- Vérifier si le ticket est actuellement en attente d'approbation.
-    IF ticket_status = 'Resolved' THEN
-        -- Approuver la solution.
-        UPDATE GLPI_TICKET_SOLUTION
-        SET APPROVAL = 1
-        WHERE ID = p_solution_id;
-        fn_close_ticket(p_ticket_id, p_solution_id);
-    ELSE
-        -- Lever une exception si le ticket n'est pas en attente d'approbation.
-        RAISE_APPLICATION_ERROR(-20007, 'Le ticket n''est pas en attente d''approbation.');
-    END IF;
-
-    -- Appliquer les modifications.
-    COMMIT;
-END fn_approve_ticket;
-/
-
--- Procédure pour modifier le statut d'un ticket en résolu
-CREATE OR REPLACE PROCEDURE fn_resolved_ticket (
-    p_ticket_id IN VARCHAR2
-)AS
-  solution_count NUMBER;
-BEGIN
-  -- Compter le nombre de solutions pour l'ID de ticket donné.
-  SELECT COUNT(*)
-  INTO solution_count
-  FROM GLPI_TICKET_SOLUTION
-  WHERE TICKET_ID = p_ticket_id;
-
-  -- Vérifier s'il existe au moins une solution pour ce ticket.
-  IF solution_count > 0 THEN
-    -- Mise à jour de l'état du ticket à 'Resolved'.
-    UPDATE GLPI_TICKET
-    SET STATUS = 'Resolved'
-    WHERE ID = p_ticket_id;
-  ELSE
-    -- Lever une exception si aucune solution n'est trouvée pour ce ticket.
-    RAISE_APPLICATION_ERROR(-20004, 'Aucune solution trouvée pour ce ticket, impossible de le résoudre.');
-  END IF;
-
-  -- Appliquer les modifications.
-  COMMIT;
-END fn_resolved_ticket;
-/
-
---------- PROCEDURES INSERTION -----------
-
 -- Procédure d'insertion dans la table GLPI_USER
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_user (
     p_name  IN  VARCHAR2,
@@ -190,6 +195,26 @@ EXCEPTION
 END fn_insert_glpi_user;
 /
 
+-- Procédure pour insérer un élément lié à un utilisateur dans l'inventaire
+CREATE OR REPLACE PROCEDURE fn_insert_glpi_inventory (
+    p_category  IN VARCHAR2,
+    p_reference IN VARCHAR2,
+    p_owner_id  IN VARCHAR2
+) AS
+BEGIN
+    INSERT INTO GLPI_INVENTORY ( CATEGORY, REFERENCE, OWNER_ID)
+    VALUES ( p_category, p_reference, p_owner_id);
+    
+    COMMIT;
+    
+    DBMS_OUTPUT.PUT_LINE('Data inserted successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Error inserting data: ' || SQLERRM);
+END fn_insert_glpi_inventory;
+/
+
 -- Procédure pour insérer un nouveau ticket
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_ticket (
     p_type         IN VARCHAR2,
@@ -201,8 +226,7 @@ CREATE OR REPLACE PROCEDURE fn_insert_glpi_ticket (
     p_description  IN VARCHAR2,
     p_owner_id     IN VARCHAR2,
     p_inventory_item_id IN VARCHAR2
-)
-AS
+) AS
 BEGIN
     INSERT INTO GLPI_TICKET (
         TYPE,
@@ -252,36 +276,19 @@ BEGIN
 END;
 /
 
--- Procédure pour insérer un élément lié à un utilisateur dans l'inventaire
-CREATE OR REPLACE PROCEDURE fn_insert_glpi_inventory (
-    p_category  IN VARCHAR2,
-    p_reference IN VARCHAR2,
-    p_owner_id  IN VARCHAR2
-)
-AS
-BEGIN
-    INSERT INTO GLPI_INVENTORY ( CATEGORY, REFERENCE, OWNER_ID)
-    VALUES ( p_category, p_reference, p_owner_id);
-    
-    COMMIT;
-    
-    DBMS_OUTPUT.PUT_LINE('Data inserted successfully.');
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE_APPLICATION_ERROR(-20001, 'Error inserting data: ' || SQLERRM);
-END fn_insert_glpi_inventory;
-/
-
 -- Procédure pour insérer une nouvelle proposition de tache à un ticket
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_task ( 
     p_ticket_id   IN VARCHAR2,
     p_description IN VARCHAR2
-)
-AS
+) AS
 BEGIN
     INSERT INTO GLPI_TICKET_TASK(TICKET_ID, DESCRIPTION)
     VALUES (p_ticket_id, p_description);
+
+    -- Mise à jour de la date_update du glpi_ticket
+    UPDATE GLPI_TICKET
+    SET DATE_UPDATED = SYSDATE
+    WHERE ID = p_ticket_id;
 
     COMMIT;
 
@@ -297,11 +304,15 @@ END fn_insert_glpi_task;
 CREATE OR REPLACE PROCEDURE fn_insert_glpi_solution ( 
     p_ticket_id   IN VARCHAR2,
     p_description IN VARCHAR2
-)
-AS
+) AS
 BEGIN
     INSERT INTO GLPI_TICKET_SOLUTION(TICKET_ID, DESCRIPTION)
     VALUES (p_ticket_id, p_description);
+
+    -- Mise à jour de la date_update du glpi_ticket
+    UPDATE GLPI_TICKET
+    SET DATE_UPDATED = SYSDATE
+    WHERE ID = p_ticket_id;
 
     COMMIT;
 
