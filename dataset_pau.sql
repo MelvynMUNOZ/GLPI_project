@@ -1,6 +1,6 @@
 -- USERS --
 
-exec fn_insert_glpi_user('John Doe', 'john.doe@example.com', 'Cergy','User');
+exec fn_insert_glpi_user('John Doe', 'john.doe@example.com', 'User');
 exec fn_insert_glpi_user('Jane Smith', 'jane.smith@example.com','User');
 exec fn_insert_glpi_user('Alice Smith', 'alice.smith@example.com','User' );
 exec fn_insert_glpi_user('Sarah Johnson', 'sarah.johnson@example.com','User');

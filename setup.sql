@@ -11,9 +11,6 @@ DROP USER GLPI_CERGY CASCADE;
 DROP USER GLPI_PAU CASCADE;
 DROP USER GLPI CASCADE;
 
-DROP DATABASE LINK db_cergy;
-DROP DATABASE LINK db_pau;
-
 
 -------- TABLESPACE & ADMINS --------------
 
@@ -49,22 +46,28 @@ GRANT dba TO GLPI_PAU;
 connect GLPI_CERGY/admin_cergy
 @table.sql
 @view.sql
+@index.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
 @role.sql
+
+@dataset_cergy.sql
 
 -- Setup database Pau
 connect GLPI_PAU/admin_pau
 @table.sql
 @view.sql
+@index.sql
 @procedure.sql
 @sequence.sql
 @trigger.sql
 @role.sql
 
+@dataset_pau.sql
+
 -- Setup global central database
 connect GLPI/admin
-create database link db_cergy connect to GLPI_CERGY identified by admin_cergy using 'XE';
-create database link db_pau connect to GLPI_PAU identified by admin_pau using 'XE';
-@admin_view.sql --TODO: FIX errors
+create database link db_cergy connect to GLPI_CERGY identified by admin_cergy using 'localhost:1521';
+create database link db_pau connect to GLPI_PAU identified by admin_pau using 'localhost:1521';
+@admin_view.sql
