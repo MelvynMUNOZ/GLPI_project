@@ -81,7 +81,7 @@ BEGIN
     SELECT approval
     INTO v_approval_status
     FROM GLPI_TICKET_SOLUTION
-    WHERE TICKET_ID = p_ticket_id;
+    WHERE ID = p_solution_id;
 
     -- Si l'approbation n'est pas à 1, lever une exception
     IF v_approval_status != 1 THEN
