@@ -35,6 +35,29 @@ exec fn_insert_glpi_ticket ('Incident','Hardware','Low','Low','High','Clavier no
 -- TICKETS OPERATIONS --
 
 exec fn_attribute_ticket ('t1','u6');
+exec fn_attribute_ticket ('t2','u6');
+
+-- TICKETS TASK --
+
+exec fn_insert_glpi_task('t1','Réinstallation de RStudio');
+exec fn_insert_glpi_task('t1','Mise à jour de RStudio');
+
+-- TICKETS SOLUTION --
+
+exec fn_insert_glpi_solution('t1','Mise à jour de RStudio, le logiciel fonctionne');
+exec fn_insert_glpi_solution('t1','Gros zizi');
+
+-- TICKETS CHANGE --
+
+exec fn_resolve_ticket('t1');
+
+
+-- TICKETS APPROVAL --
+
+exec fn_approve_ticket('t1','ts1');
+
+
+
 
 
 
