@@ -15,14 +15,21 @@ Se connecter avec `system`. Executer le script `setup.sql` :
 @setup.sql
 ```
 
-Utiliser la database Cergy. Se connecter avec `GLPI_CERGY` :
+Pour utiliser la database Cergy : se connecter avec `GLPI_CERGY` :
 
 ```sql
 connect GLPI_CERGY/admin_cergy
 ```
 
-Utiliser la database Pau. Se connecter avec `GLPI_PAU` :
+Pour utiliser la database Pau : se connecter avec `GLPI_PAU` :
 
 ```sql
 connect GLPI_PAU/admin_pau
 ```
+
+## Auteurs
+Raphael CAUSSE
+Lucas COTOT
+Thomas GONS
+Melvyn MUNOZ
+Mathéo PEREIRA

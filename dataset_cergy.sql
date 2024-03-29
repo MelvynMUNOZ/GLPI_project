@@ -45,7 +45,7 @@ exec fn_insert_glpi_task('t1','Mise à jour de RStudio');
 -- TICKETS SOLUTION --
 
 exec fn_insert_glpi_solution('t1','Mise à jour de RStudio, le logiciel fonctionne');
-exec fn_insert_glpi_solution('t1','Gros zizi');
+exec fn_insert_glpi_solution('t1','Supprimer le logiciel RStudio');
 
 -- TICKETS CHANGE --
 
