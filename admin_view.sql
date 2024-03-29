@@ -1,6 +1,12 @@
 ----- DROPS -----
 
 DROP VIEW view_admin_glpi_ticket;
+DROP VIEW view_admin_glpi_ticket_waiting;
+DROP VIEW view_admin_glpi_ticket_attributed;
+DROP VIEW view_admin_glpi_ticket_resolved;
+DROP VIEW view_admin_glpi_ticket_closed;
+DROP VIEW view_admin_glpi_ticket_deleted;
+DROP VIEW view_admin_glpi_ticket_active;
 DROP VIEW view_admin_glpi_user;
 DROP VIEW view_admin_glpi_software_inventories;
 DROP VIEW view_admin_glpi_hardware_inventories;
@@ -15,6 +21,44 @@ CREATE VIEW view_admin_glpi_ticket
     SELECT * FROM view_glpi_ticket@db_cergy
         UNION
     SELECT * FROM view_glpi_ticket@db_pau;
+
+-- Vue global sur les tickets par status
+
+CREATE VIEW view_admin_glpi_ticket_waiting
+    AS
+    SELECT * FROM view_glpi_ticket_waiting@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_waiting@db_pau;
+
+CREATE VIEW view_admin_glpi_ticket_attributed
+    AS
+    SELECT * FROM view_glpi_ticket_attributed@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_attributed@db_pau;
+
+CREATE VIEW view_admin_glpi_ticket_resolved
+    AS
+    SELECT * FROM view_glpi_ticket_resolved@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_resolved@db_pau;
+
+CREATE VIEW view_admin_glpi_ticket_closed
+    AS
+    SELECT * FROM view_glpi_ticket_closed@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_closed@db_pau;
+
+CREATE VIEW view_admin_glpi_ticket_deleted
+    AS
+    SELECT * FROM view_glpi_ticket_deleted@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_deleted@db_pau;
+
+CREATE VIEW view_admin_glpi_ticket_active
+    AS
+    SELECT * FROM view_glpi_ticket_active@db_cergy
+        UNION
+    SELECT * FROM view_glpi_ticket_active@db_pau;
 
 -- Vue global sur les users
 CREATE VIEW view_admin_glpi_user
